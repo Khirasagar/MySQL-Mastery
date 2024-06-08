@@ -211,12 +211,113 @@ SELECT LENGTH(Ename) From Employee;
 54.count the no of letters present in the given string "I will kill you!!!"?
 SELECT LENGTH("I will kill you!!!");
 
+55.Give the 2nd highest salary in the table?
+first print the highest salary of the employee
+
+Satic
+SELECT MAX(Salary) FROM Employee ;
+
+SELECT MAX(Salary) FROM Employee where salary<62000;
+Dynamic Aproach
+SELECT MAX(Salary) FROM Employee
+							WHERE SALARY <
+											(SELECT MAX(Salary) FROM Employee WHERE SALARY);
+
+56.Give the 3rd highest salary in the table?
+SELECT MAX(Salary) FROM Employee WHERE SALARY <
+	(SELECT MAX(Salary) FROM Employee WHERE SALARY <
+		(SELECT MAX(Salary) FROM Employee WHERE SALARY <
+			(SELECT MAX(Salary) FROM Employee WHERE SALARY)));
+    
+    
+   
+   
+JOINS
+
+57.SELECT MATCHING RECORDS FROM FROM TWO TABLES?
 
 
+CREATE TABLE employees (
+    EmpId INT PRIMARY KEY,
+    ename VARCHAR(100),
+    dept VARCHAR(100),
+    location VARCHAR(100)
+);
+INSERT INTO employees (EmpId, ename, dept, location) VALUES (100, 'John Doe', 'HR', 'New York');
+INSERT INTO employees (EmpId, ename, dept, location) VALUES (101, 'Jane Smith', 'Finance', 'Chicago');
+INSERT INTO employees (EmpId, ename, dept, location) VALUES (102, 'Michael Brown', 'IT', 'San Francisco');
+INSERT INTO employees (EmpId, ename, dept, location) VALUES (103, 'Emily Davis', 'Marketing', 'Los Angeles');
+INSERT INTO employees (EmpId, ename, dept, location) VALUES (104, 'William Johnson', 'Sales', 'Miami');
+
+CREATE TABLE Attendance (
+    EmpID INT,
+    Attd_date DATE,
+    class VARCHAR(50)
+);
+
+INSERT INTO Attendance (EmpID, Attd_date, class) VALUES (100, '2016-02-23', 'I');
+INSERT INTO Attendance (EmpID, Attd_date, class) VALUES (100, '2016-02-23', 'II');
+INSERT INTO Attendance (EmpID, Attd_date, class) VALUES (102, '2016-02-23', 'I');
+INSERT INTO Attendance (EmpID) VALUES (102);
+INSERT INTO Attendance (EmpID, Attd_date, class) VALUES (104, '2016-02-23', 'I');
+
+57.SELECT MATCHING RECORDS FROM FROM TWO TABLES based on EmpID?
+SELECT employees.Ename,employees.dept,Attendance.Attd_date FROM employees
+		INNER JOIN 
+				Attendance ON employees.EmpID=Attendance.EmpId
+
+58.SELECT MATCHING RECORDS FROM FROM TWO TABLES class , location and employee?
+SELECT employees.EmpId,employees.location,Attendance.class FROM employees
+		INNER JOIN 
+				Attendance ON employees.EmpID=Attendance.EmpId;
 
 
+59.substract the two tables and give all the records from employee table?
+SELECT * FROM employees WHERE EmpId 
+	NOT IN 
+		(SELECT EmpId FROM attendance);
+
+60.give eid,ename,dept,location,attd_date,class only if the records are common between two tables?
+
+SELECT employees.EmpId,employees.ename,employees.dept,employees.location,attendance.Attd_date,attendance.class
+	FROM employees 
+		INNER JOIN 
+        attendance ON employees.EmpId = attendance.EmpId;
+        
 
 
+LEFT JOIN
+61.Give the ename ,dept, atd_date, such that all the records are displayed from the left table and only matching records are displayed from the right table?
+SELECT employees.ename ,employees.dept,attendance.attd_date from employees 
+	left join attendance ON 
+			employees.EmpId = Attendance.EmpId;
+            
+62.Give the empid ,dept, class such that all the records are displayed from the left table and only matching records are displayed from the right table?
+SELECT employees.EmpId ,employees.dept,attendance.class from employees 
+	left join attendance ON 
+			employees.EmpId = Attendance.EmpId;           
+            
+63.Give the name of the employee whose birth year is in the year 2000?
+	
+    SELECT name from employee where date year(dob)==2000;
+    
+    select Month(now());
+    select Day(now());
+    select minute(now());
+    select second(now());
+    
+
+INTERSECT
+
+SELECT EmpId, ename, dept ,location FROM employees
+INTERSECT
+SELECT EmpId, attd_date, class FROM attendance;
+
+SELECT EmpId, ename, dept, location
+FROM employees
+INTERSECT
+SELECT EmpId, attd_date, class
+FROM attendance;
 
 
 SET SQL_SAFE_UPDATES = 0;
